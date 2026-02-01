@@ -4,7 +4,6 @@ import Fastify from "fastify"
 import cookie from "@fastify/cookie"
 import authRoutes from "./modules/auth/routes"
 import env from "./config/env"
-import canvasRoutes from "./modules/canvas/routes"
 
 const app = Fastify({
     logger: true,
@@ -16,9 +15,6 @@ app.register(cookie)
 
 // Register auth routes
 app.register(authRoutes, { prefix: '/api/auth' })
-
-// Register canvas routes
-app.register(canvasRoutes, { prefix: '/api/canvas' })
 
 // Start server
 const start = async () => {

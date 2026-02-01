@@ -1,6 +1,7 @@
 import type { FastifyPluginAsync, FastifyRequest } from "fastify"
 import { AuthService } from "./service"
 import env from "../../config/env"
+import fastifyCookie from '@fastify/cookie'
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -36,6 +37,8 @@ function getDeviceInfo(request: FastifyRequest): {
 }
 
 const routes: FastifyPluginAsync = async (app) => {
+    await app.register(fastifyCookie)
+
     // Signup route
     app.post('/signup', async (request, reply) => {
         try {
