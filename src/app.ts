@@ -2,8 +2,10 @@
 
 import Fastify from "fastify"
 import cookie from "@fastify/cookie"
-import authRoutes from "./modules/auth/routes"
 import env from "./config/env"
+import authRoutes from "./modules/auth/routes"
+import academicsRoutes from "./modules/academics/routes"
+
 
 const app = Fastify({
     logger: true,
@@ -15,6 +17,9 @@ app.register(cookie)
 
 // Register auth routes
 app.register(authRoutes, { prefix: '/api/auth' })
+
+// Register academics routes
+app.register(academicsRoutes, { prefix: '/api/academics' })
 
 // Start server
 const start = async () => {
