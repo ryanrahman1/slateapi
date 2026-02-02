@@ -73,15 +73,25 @@ const routes: FastifyPluginAsync = async (app) => {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-                maxAge: 60 * 60 * 24 * 30, // 30 days
+                maxAge: 15552000, // 180 days
+                path: '/'
+            }
+
+            const checkOptions: any = {
+                httpOnly: false,
+                secure: false,
+                sameSite: 'lax',
+                maxAge: 15552000, // 180 days
                 path: '/'
             }
 
             if (env.COOKIE_DOMAIN) {
                 cookieOptions.domain = env.COOKIE_DOMAIN
+                checkOptions.domain = env.COOKIE_DOMAIN
             }
 
             reply.setCookie('session_token', result.token, cookieOptions)
+            reply.setCookie('session_token_check', 'true', checkOptions)
 
             return reply.status(201).send({
                 user: result.user
@@ -120,15 +130,25 @@ const routes: FastifyPluginAsync = async (app) => {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-                maxAge: 60 * 60 * 24 * 30, // 30 days
+                maxAge: 15552000, // 180 days
+                path: '/'
+            }
+
+            const checkOptions: any = {
+                httpOnly: false,
+                secure: false,
+                sameSite: 'lax',
+                maxAge: 15552000, // 180 days
                 path: '/'
             }
 
             if (env.COOKIE_DOMAIN) {
                 cookieOptions.domain = env.COOKIE_DOMAIN
+                checkOptions.domain = env.COOKIE_DOMAIN
             }
 
             reply.setCookie('session_token', result.token, cookieOptions)
+            reply.setCookie('session_token_check', 'true', checkOptions)
 
             return reply.status(200).send({
                 user: result.user
@@ -156,11 +176,21 @@ const routes: FastifyPluginAsync = async (app) => {
                 path: '/'
             }
 
+            const checkOptions: any = {
+                httpOnly: false,
+                secure: false,
+                sameSite: 'lax',
+                maxAge: 15552000, // 180 days
+                path: '/'
+            }
+
             if (env.COOKIE_DOMAIN) {
                 cookieOptions.domain = env.COOKIE_DOMAIN
+                checkOptions.domain = env.COOKIE_DOMAIN
             }
 
             reply.clearCookie('session_token', cookieOptions)
+            reply.clearCookie('session_token_check', checkOptions)
 
             return reply.status(200).send({ 
                 message: 'Signed out successfully' 

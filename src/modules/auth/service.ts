@@ -23,7 +23,7 @@ export class AuthService {
     ): Promise<string> {
         const token = AuthService.generateToken()
         const expiresAt = new Date()
-        expiresAt.setDate(expiresAt.getDate() + 30)
+        expiresAt.setDate(expiresAt.getDate() + 180)
 
         const { error } = await supabase
             .schema('core')
