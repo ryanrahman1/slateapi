@@ -8,6 +8,7 @@ import authRoutes from "./modules/auth/routes"
 import academicsRoutes from "./modules/academics/routes"
 import essaysRoutes from "./modules/essays/routes"
 import tasksRoutes from "./modules/tasks/routes"
+import schedulesRoutes from "./modules/schedules/routes"
 
 
 const app = Fastify({
@@ -35,6 +36,9 @@ app.register(essaysRoutes, { prefix: '/api/essays' })
 
 // Register tasks routes (tasks + goals under /api)
 app.register(tasksRoutes, { prefix: '/api' })
+
+// Register schedules routes
+app.register(schedulesRoutes, { prefix: '/api/schedules' })
 
 // Start server
 const start = async () => {
