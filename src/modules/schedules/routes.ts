@@ -1,6 +1,7 @@
 import type { FastifyPluginAsync } from "fastify"
 import { supabase } from "../../config/supabase"
 import { optionalAuth, requireAuth } from '../../plugins/auth'
+import { request } from "node:http";
 
 function formatDateLocal(date: any) {
     const year = date.getFullYear();
@@ -76,6 +77,19 @@ const routes: FastifyPluginAsync = async (fastify) => {
                     ? raw.classes
                     : []
         return reply.status(200).send({ schedule })
+    })
+
+    // helper route to get tomorrows schedule TYPE via school id
+    fastify.get("/id/:schoolId/tomorrow", async (request, reply) => {
+        const { schoolId } = request.params as { schoolId: string }
+        const tomorrowLocal = new Date()
+        tomorrowLocal.setDate(tomorrowLocal.getDate() + 1)
+        const formatted = formatDateLocal(tomorrowLocal)
+        const { data, error } = await supabase.schema("core").from("bell_schedule_days").select("*").eq("school_id", schoolId).eq("day", formatted).single() // ensure its the date for eastern time
+        if (error) { return reply.status(500).send({ message: "Error fetching schedule" + error?.message }) }
+        const { data: schedule, error: sError } = await supabase.schema("core").from("bell_schedules").select("name").eq("id", data.bell_schedule_id).single()
+        if (sError) { return reply.status(500).send({ message: "Error fetching schedule" + sError?.message }) }
+        return reply.status(200).send({ name: schedule?.name })
     })
 
 
